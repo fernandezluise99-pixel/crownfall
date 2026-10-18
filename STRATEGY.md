@@ -1,5 +1,7 @@
 # Strategic expansion
 
+The battlefield is now **2520 × 5040**, 50% wider and taller than the original map (2.25× area). Keeps retain their original fortified footprints, with a longer open front, repositioned crossings, and additional foliage. Player and enemy champion sprites render at 70% of their previous size; combat ranges, HP, and damage retain their existing balance. Portraits and HUD controls retain their sizes.
+
 The current build loads `strategy-art.js` and `strategy.js` after the original game. Start a new battle after refreshing to use the new systems. Everything remains local and dependency-free.
 
 ## Merchant and economy

@@ -16,10 +16,10 @@ vm.runInContext(`
 begin(); build('barracks');
 if(placing!=='barracks')throw Error('Building selection');
 const initialBuildings=buildings.length;
-if(!placeBuilding(1140,3000))throw Error('Building placement');
+if(!placeBuilding(1560,4680))throw Error('Building placement');
 if(HOME.x!==ENEMY.x || HOME.y<=ENEMY.y || H<=W) throw Error('Vertical map layout');
 for(let n=0;n<6;n++){const pos=site(n);if(pos.x<40||pos.x>W-40||pos.y<40||pos.y>H-40)throw Error('Build site outside map');}
-if(W!==1680||H!==3360||VW!==1260||VH!==800)throw Error('MOBA viewport and vertical world');
+if(W!==2520||H!==5040||VW!==1260||VH!==800)throw Error('MOBA viewport and vertical world');
 if(buildings.length!==initialBuildings+1 || gold!==100) throw Error('Construction cost');
 if(canPlace(HOME.x,HOME.y)||canPlace(ENEMY.x,ENEMY.y))throw Error('Invalid placement accepted');
 draw();
@@ -28,17 +28,17 @@ if(hero.y>=oldY) throw Error('Top-down vertical movement');
 const oldX=hero.x; keys.add('d'); step(.1); keys.clear();
 if(hero.x<=oldX) throw Error('Top-down horizontal movement');
 hero.y=1600;updateCamera();if(camera.y<=0||camera.y>H-VH)throw Error('Scrolling camera');
-hero.y=2860;
+hero.y=4540;
 step(1.1); if(!units.some(u=>u.team===0&&u.type==='soldier')) throw Error('Recruitment');
 hero.hp=100; ability('e'); if(hero.hp!==180 || hero.e!==18) throw Error('Healing');
 const enemy=unit(1,'soldier',hero.x+10,hero.y); units.push(enemy); ability('q');
 if(enemy.hp>=110 || hero.q!==7) throw Error('Shockwave');
 gold=2000;build('forge');if(forge!==0)throw Error('Merchant prerequisite');
-build('merchant');if(!placeBuilding(1140,3200))throw Error('Merchant placement');
+build('merchant');if(!placeBuilding(1560,4880))throw Error('Merchant placement');
 build('forge');if(forge!==1)throw Error('Equipment upgrade');
 const caster=unit(0,'wizard',900,1500), splashA=unit(1,'soldier',900,1550),splashB=unit(1,'soldier',920,1550);
 units.push(caster,splashA,splashB);attack(caster,splashA);stepProjectiles(.2);stepProjectiles(.5);if(splashB.hp>=splashB.max)throw Error('Wizard splash');
-build('wizard');if(!placeBuilding(540,2800))throw Error('Wizard building');
+build('wizard');if(!placeBuilding(960,4480))throw Error('Wizard building');
 step(2);if(!units.some(u=>u.type==='wizard'&&u.team===0))throw Error('Wizard recruitment');
 const victim=buildings.find(b=>b.team===1);hit(hero,victim,10000);step(.1);
 if(buildings.includes(victim))throw Error('Destroyed building retained');
@@ -126,19 +126,19 @@ console.log('PASS: unique in-frame HUD controls, clickable talent/skill buttons,
 vm.runInContext(`{
 function siegeTrial(id,rank,creepCount,talent='vitality'){
 reset();chooseHero(id);begin();while(level<rank)gainXP(xpNeeded());while(spendPoint(talent)){}hero.hp=hero.max;
-const tower=makeBuilding(1,'tower',840,1500);buildings=[tower];units=units.filter(u=>u.type==='king');hero.x=840;hero.y=1500+Math.min(hero.range-5,70);enemyTimer=9999;
-for(let i=0;i<creepCount;i++)units.push(unit(0,'soldier',800+(i%4)*24,1530+Math.floor(i/4)*24));
+const tower=makeBuilding(1,'tower',1260,1500);buildings=[tower];units=units.filter(u=>u.type==='king');hero.x=1260;hero.y=1500+Math.min(hero.range-5,70);enemyTimer=9999;
+for(let i=0;i<creepCount;i++)units.push(unit(0,'soldier',1220+(i%4)*24,1530+Math.floor(i/4)*24));
 const initialHeroHP=hero.hp;let elapsed=0;
 while(elapsed<40&&hero.hp>0&&tower.hp>0){if(hero.q<=0)ability('q');if(hero.e<=0&&id==='warden'&&hero.hp<hero.max-70)ability('e');step(.05);elapsed+=.05;}
 return {id,rank,creepCount,seconds:Math.round(elapsed*10)/10,heroAlive:hero.hp>0,towerHP:Math.round(Math.max(0,tower.hp)),initialHeroHP};}
 const results=[];for(const id of Object.keys(champions))for(const talent of ['power','vitality','tempo']){const result=siegeTrial(id,4,0,talent);if(result.heroAlive||result.towerHP<1000)throw Error('Early solo tower dive too strong '+JSON.stringify(result));if(talent==='vitality')results.push(result);}
 const supported=siegeTrial('warden',4,8);if(supported.towerHP>0||!supported.heroAlive)throw Error('Wave-supported siege impossible '+JSON.stringify(supported));results.push(supported);
 console.log('SIEGE BALANCE '+JSON.stringify(results));
-reset();chooseHero('warden');begin();const defense=makeBuilding(1,'tower',840,1500);buildings=[defense];units=units.filter(u=>u.type==='king');hero.x=840;hero.y=1550;hero.hp=hero.max;
+reset();chooseHero('warden');begin();const defense=makeBuilding(1,'tower',1260,1500);buildings=[defense];units=units.filter(u=>u.type==='king');hero.x=1260;hero.y=1550;hero.hp=hero.max;
 const hp=defense.hp;hit(hero,defense,100,'ability');if(hp-defense.hp>3.01)throw Error('Ability backdoor reduction');defense.hp-=200;clock=10;updateDefenses(1);if(defense.hp<=hp-203)throw Error('Backdoor regeneration');
-const creep=unit(0,'soldier',840,1520);units.push(creep);updateDefenses(.05);if(backdoorProtected(defense))throw Error('Troops must disable protection');
+const creep=unit(0,'soldier',1260,1520);units.push(creep);updateDefenses(.05);if(backdoorProtected(defense))throw Error('Troops must disable protection');
 const baseHP=defense.hp;hit(hero,defense,100,'basic');if(Math.abs(baseHP-defense.hp-50)>.01)throw Error('Supported basic structure damage');
-defense.lockedTarget=hero;if(guardTarget(defense,[hero,creep])!==hero)throw Error('Tower must hold aggro');hero.x=1400;if(guardTarget(defense,[hero,creep])!==creep)throw Error('Tower aggro release');
+defense.lockedTarget=hero;if(guardTarget(defense,[hero,creep])!==hero)throw Error('Tower must hold aggro');hero.x=1820;if(guardTarget(defense,[hero,creep])!==creep)throw Error('Tower aggro release');
 hero.hp=hero.max;hit(defense,hero,20);const combatHP=hero.hp;gainXP(xpNeeded());if(hero.hp!==combatHP)throw Error('Level-up healed during tower damage');
 hero.q=6;hero.e=12;gainXP(xpNeeded());if(hero.q!==6||hero.e!==12)throw Error('Level-up refreshed cooldowns');
 hit(defense,hero,10000);if(hero.respawn<8)throw Error('Lethal projectile needs respawn timer');step(.05);if(hero.hp>0)throw Error('Instant respawn after projectile death');
@@ -149,26 +149,26 @@ vm.runInContext(`{
 reset();chooseHero('warden');begin();hero.hp=100;clock=5;applyBaseRegen(1);if(hero.hp!==126||!hero.regenActive)throw Error('Base regen rate');
 const invader=unit(1,'soldier',hero.x+100,hero.y);units.push(invader);const hp=hero.hp;applyBaseRegen(1);if(hero.hp!==hp||hero.regenActive)throw Error('Regen during invasion');units=units.filter(u=>u!==invader);
 hero.lastDamagedAt=clock;clock+=3;applyBaseRegen(1);if(hero.hp!==hp)throw Error('Regen safety delay');clock++;applyBaseRegen(1);if(hero.hp<=hp)throw Error('Regen after delay');
-hero.x=840;hero.y=1500;const fieldHP=hero.hp;applyBaseRegen(1);if(hero.hp!==fieldHP)throw Error('Field regen');
-hero.x=840;hero.y=2860;hero.hp=hero.max;const killer=makeBuilding(1,'tower',hero.x+20,hero.y);hit(killer,hero,10000);ui();const deathTime=hero.respawn;if($('#deathPanel').hidden||+$('#deathSeconds').textContent!==deathTime)throw Error('Visible death timer');
+hero.x=1260;hero.y=1500;const fieldHP=hero.hp;applyBaseRegen(1);if(hero.hp!==fieldHP)throw Error('Field regen');
+hero.x=1260;hero.y=4540;hero.hp=hero.max;const killer=makeBuilding(1,'tower',hero.x+20,hero.y);hit(killer,hero,10000);ui();const deathTime=hero.respawn;if($('#deathPanel').hidden||+$('#deathSeconds').textContent!==deathTime)throw Error('Visible death timer');
 step(.5);if(hero.hp>0||hero.respawn>=deathTime)throw Error('Death countdown');togglePause();const remaining=hero.respawn;step(1);if(hero.respawn!==remaining)throw Error('Death timer during pause');togglePause();for(let i=0;i<100&&hero.hp<=0;i++)step(.1);if(hero.hp!==hero.max||!$('#deathPanel').hidden)throw Error('Full-health respawn / dismiss timer');
-const wallWalker={x:600,y:2600};Battlefield.move(wallWalker,600,2400);if(wallWalker.y<2540)throw Error('Walk through castle wall');
-const gateWalker={x:840,y:2600};Battlefield.move(gateWalker,840,2400);if(gateWalker.y!==2400)throw Error('Gate passage blocked');
-const riverWalker={x:500,y:1580};Battlefield.move(riverWalker,500,1780);if(riverWalker.y>1640)throw Error('Walk through deep river');
-const bridgeWalker={x:840,y:1580};Battlefield.move(bridgeWalker,840,1780);if(bridgeWalker.y!==1780)throw Error('Bridge passage blocked');
-const marcher={x:540,y:2970};for(let i=0;i<4000&&dist(marcher,ENEMY)>25;i++){const goal=Battlefield.route(marcher,ENEMY),d=dist(marcher,goal)||1;Battlefield.move(marcher,marcher.x+(goal.x-marcher.x)/d*5.2,marcher.y+(goal.y-marcher.y)/d*5.2);}if(dist(marcher,ENEMY)>25)throw Error('Army cannot navigate keeps and river');
+const wallWalker={x:1020,y:4280};Battlefield.move(wallWalker,1020,4080);if(wallWalker.y<4220)throw Error('Walk through castle wall');
+const gateWalker={x:1260,y:4280};Battlefield.move(gateWalker,1260,4080);if(gateWalker.y!==4080)throw Error('Gate passage blocked');
+const riverWalker={x:900,y:2420};Battlefield.move(riverWalker,900,2620);if(riverWalker.y>2480)throw Error('Walk through deep river');
+const bridgeWalker={x:1260,y:2420};Battlefield.move(bridgeWalker,1260,2620);if(bridgeWalker.y!==2620)throw Error('Bridge passage blocked');
+const marcher={x:960,y:4650};for(let i=0;i<4000&&dist(marcher,ENEMY)>25;i++){const goal=Battlefield.route(marcher,ENEMY),d=dist(marcher,goal)||1;Battlefield.move(marcher,marcher.x+(goal.x-marcher.x)/d*5.2,marcher.y+(goal.y-marcher.y)/d*5.2);}if(dist(marcher,ENEMY)>25)throw Error('Army cannot navigate keeps and river');
 if(canPlace(180,3000))throw Error('Building outside wall');draw();
 }`,sandbox);
 for(const name of ['foliage','fortifications']){const png=fs.readFileSync('assets/art/'+name+'-v1.png');assert.equal(png.toString('hex',0,8),'89504e470d0a1a0a');}
 console.log('PASS: safe base regeneration, visible death timer / paused countdown / respawn, wall and river collision, open gates/bridges, end-to-end army routing, environment assets');
-vm.runInContext(`{const samples=[],originalTile=PixelArt.tile;PixelArt.tile=(ctx,index,x,y,size)=>{samples.push(index);return true;};hero.x=840;hero.y=2860;draw();if(!samples.includes(0)||!samples.includes(4)||!samples.includes(8))throw Error('Missing grass, road or castle floor pass');samples.length=0;hero.y=1672;draw();if(!samples.includes(10)||!samples.includes(12))throw Error('Missing river or bridge tiles');PixelArt.tile=originalTile;}`,sandbox);
+vm.runInContext(`{const samples=[],originalTile=PixelArt.tile;PixelArt.tile=(ctx,index,x,y,size)=>{samples.push(index);return true;};hero.x=1260;hero.y=4540;draw();if(!samples.includes(0)||!samples.includes(4)||!samples.includes(8))throw Error('Missing grass, road or castle floor pass');samples.length=0;hero.y=2512;draw();if(!samples.includes(10)||!samples.includes(12))throw Error('Missing river or bridge tiles');PixelArt.tile=originalTile;}`,sandbox);
 console.log('PASS: actual game draw samples grass, road, courtyard, river and bridge tile textures');
 vm.runInContext(`{
 reset();chooseHero('warden');selectDifficulty(0);const easyHP=enemyHero.max,easyReaction=difficulty().reaction,easyBuild=difficulty().build;selectDifficulty(7);if(enemyHero.max<=easyHP||difficulty().reaction>=easyReaction||difficulty().build>=easyBuild)throw Error('Difficulty scaling');
 begin();const lockedDifficulty=selectedDifficulty;if(selectDifficulty(0)!==false||selectedDifficulty!==lockedDifficulty)throw Error('Mid-match difficulty change');
-reset();chooseHero('warden');selectDifficulty(3);begin();enemyHero.x=840;enemyHero.y=1400;hero.x=840;hero.y=1450;enemyDecision([hero]);if(enemyHero.mode!=='KITING'||enemyHero.goal.y>=enemyHero.y)throw Error('Ranged kiting');
+reset();chooseHero('warden');selectDifficulty(3);begin();enemyHero.x=1260;enemyHero.y=1400;hero.x=1260;hero.y=1450;enemyDecision([hero]);if(enemyHero.mode!=='KITING'||enemyHero.goal.y>=enemyHero.y)throw Error('Ranged kiting');
 enemyHero.hp=enemyHero.max*.15;enemyDecision([hero]);if(enemyHero.mode!=='RETREATING'||enemyHero.goal.y!==500)throw Error('Low-health retreat');
-reset();selectDifficulty(5);begin();enemyHero.x=840;enemyHero.y=1400;hero.x=840;hero.y=1450;projectiles=[{source:hero,target:enemyHero,melee:false,x:840,y:1370,angle:Math.PI/2}];enemyDecision([hero]);if(enemyHero.mode!=='EVADING')throw Error('Hard-mode projectile evasion');projectiles=[];
+reset();selectDifficulty(5);begin();enemyHero.x=1260;enemyHero.y=1400;hero.x=1260;hero.y=1450;projectiles=[{source:hero,target:enemyHero,melee:false,x:1260,y:1370,angle:Math.PI/2}];enemyDecision([hero]);if(enemyHero.mode!=='EVADING')throw Error('Hard-mode projectile evasion');projectiles=[];
 reset();selectDifficulty(2);begin();const count=buildings.length;enemyGold=0;enemyTimer=0;updateEnemyEconomy(0);if(buildings.length!==count)throw Error('AI ignored budget');enemyGold=220;enemyTimer=0;updateEnemyEconomy(0);if(buildings.length!==count+1||enemyGold>=220)throw Error('AI construction economy');
 const c=enemyHero,maxBefore=c.max;enemyGainXP(500);if(c.level<=1||c.max<=maxBefore)throw Error('Enemy leveling');hit(hero,c,100000);if(c.hp>0||c.respawn<=0)throw Error('Enemy death timer');updateEnemyHero(.1);if(c.hp>0||!units.includes(c))throw Error('Enemy must stay dead and tracked');for(let i=0;i<200&&c.hp<=0;i++)updateEnemyHero(.1);if(c.hp!==c.max||c.y!==500)throw Error('Enemy respawn');
 for(let mode=0;mode<8;mode++){reset();selectDifficulty(mode);begin();const enemyStart={x:enemyHero.x,y:enemyHero.y};for(let i=0;i<1200&&!ended;i++)step(.05);if(!Number.isFinite(enemyHero.hp)||!Number.isFinite(enemyHero.x)||enemyHero.hp>0&&dist(enemyHero,enemyStart)<10)throw Error('Enemy AI stuck / invalid mode '+mode);draw();}

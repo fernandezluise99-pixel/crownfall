@@ -37,7 +37,7 @@ const Strategy = (() => {
   const repairCost=b=>Math.max(20,Math.ceil(costs[b.type]*.2));
   function upgrade(b){if(!active()||b.team!==0||!buildings.includes(b)||b.buildLeft||b.upgradeLeft||(b.tier||1)>=3||gold<upgradeCost(b)||!merchant()||((b.tier||1)===2&&level<8))return false;gold-=upgradeCost(b);b.upgradeLeft=8;b.cd=8;stats.upgrades++;return true;}
   function repair(b){if(!active()||b.team!==0||!buildings.includes(b)||b.buildLeft||gold<repairCost(b)||b.hp>=b.max)return false;gold-=repairCost(b);b.hp=Math.min(b.max,b.hp+b.max*.3);return true;}
-  function selectMap(id){if(started&&!ended)return false;map=id==='narrows'?'narrows':'verdant';Battlefield.crossings.splice(0,Battlefield.crossings.length,...(map==='narrows'?[{x:540,half:76},{x:1140,half:76}]:[{x:364,half:64},{x:840,half:140},{x:1316,half:64}]));$('#mapSelect').value=map;return true;}
+  function selectMap(id){if(started&&!ended)return false;map=id==='narrows'?'narrows':'verdant';Battlefield.crossings.splice(0,Battlefield.crossings.length,...(map==='narrows'?[{x:840,half:76},{x:1680,half:76}]:[{x:600,half:64},{x:1260,half:140},{x:1920,half:64}]));$('#mapSelect').value=map;return true;}
   const originalReset=reset;
   reset=function(){ranks={};originalReset();selected=null;focus=null;march=null;command='move';spec=null;reported=false;stats={kills:0,deaths:0,gold:200,structureDamage:0,heroDamage:0,losses:0,enemyLosses:0,upgrades:0,buildings:0};close();$('#mapSelect').disabled=false;};
   const originalBegin=begin;begin=function(){originalBegin();$('#mapSelect').disabled=true;sound('build');};
@@ -88,7 +88,7 @@ const Strategy = (() => {
   chooseTroopTarget=function(u,enemies){const score=v=>{let value=dist(u,v);if(value<420){if(u.type==='siege'&&(v.structure||v.type==='king'))value*=.35;if(u.type==='archer'&&v.type==='wizard')value*=.65;if(u.type==='wizard'&&v.type==='soldier')value*=.65;if(u.type==='soldier'&&isChampion(v))value*=.8;}return value;};return enemies.reduce((best,v)=>!best||score(v)<score(best)?v:best,null);};
   const originalEconomy=updateEnemyEconomy;
   updateEnemyEconomy=function(dt){const before=new Set(buildings);originalEconomy(dt);for(const b of buildings)if(!before.has(b)&&b.team===1){b.buildLeft=b.type==='tower'?12:8;b.timer=b.buildLeft+1;b.cd=b.buildLeft;}
-    if(selectedDifficulty>=3&&clock>180&&enemyGold>=costs.siege&&!buildings.some(b=>b.team===1&&b.type==='siege')){const p={x:1080,y:720};if(!buildings.some(b=>dist(b,p)<110)){enemyGold-=costs.siege;const b=makeBuilding(1,'siege',p.x,p.y);b.buildLeft=8;b.timer=9;buildings.push(b);}}
+    if(selectedDifficulty>=3&&clock>180&&enemyGold>=costs.siege&&!buildings.some(b=>b.team===1&&b.type==='siege')){const p={x:1500,y:720};if(!buildings.some(b=>dist(b,p)<110)){enemyGold-=costs.siege;const b=makeBuilding(1,'siege',p.x,p.y);b.buildLeft=8;b.timer=9;buildings.push(b);}}
   };
   const originalAbility=ability;
   ability=function(type){const before=hero[type];if(type==='b'){march=null;focus=null;command='move';}originalAbility(type);if(['q','e'].includes(type)&&before<=0&&hero[type]>0){sound('ability');if(selectedHero==='arcanist'&&spec===1){hero[type]*=.85;if(type==='e')hero.hp=Math.min(hero.max,hero.hp+20);}}};
