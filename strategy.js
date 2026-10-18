@@ -18,7 +18,7 @@ const Strategy = (() => {
   let ranks={}, selected=null, focus=null, command='move', spec=null, stats={}, reported=false, audio=null, muted=false, map='verdant', march=null, lastSound=-100;
   const panel=document.createElement('section');panel.id='strategyPanel';panel.className='strategy-panel';panel.hidden=true;$('#gameFrame').appendChild(panel);
   const toolbar=document.createElement('div');toolbar.className='strategy-toolbar';toolbar.innerHTML='<button id="shopOpen">Merchant [6]</button><button id="specialize">Hero path</button><button id="attackMove">Attack-move [T]</button><button id="holdPosition">Hold [H]</button><button id="soundToggle">Sound: on</button>';$('#gameFrame').appendChild(toolbar);
-  const mapLabel=document.createElement('label');mapLabel.className='map-choice';mapLabel.innerHTML='BATTLEFIELD <select id="mapSelect"><option value="verdant">Verdant Front · three crossings</option><option value="narrows">Stone Narrows · two narrow crossings</option></select>';$('.difficulty-panel').appendChild(mapLabel);
+  const mapLabel=document.createElement('label');mapLabel.className='map-choice';mapLabel.innerHTML='BATTLEFIELD <select id="mapSelect"><option value="verdant">Verdant Front · three crossings</option><option value="kingdoms">Four Kingdoms · you vs 3 AI commanders</option><option value="narrows">Stone Narrows · two narrow crossings</option></select>';$('.difficulty-panel').appendChild(mapLabel);
   const siegeButton=document.createElement('button');siegeButton.dataset.build='siege';siegeButton.innerHTML='<span class="equipment-icon">♜</span><span><b>Siege workshop</b><small>Siege engine / 22 seconds</small></span><span class="cost">260 coins</span>';$('.builds').appendChild(siegeButton);siegeButton.onclick=()=>build('siege');costs.siege=260;
   const price=id=>Math.round(shop[id].cost*(1+(ranks[id]||0)*.65));
   const active=()=>started&&!paused&&!ended;
@@ -37,7 +37,7 @@ const Strategy = (() => {
   const repairCost=b=>Math.max(20,Math.ceil(costs[b.type]*.2));
   function upgrade(b){if(!active()||b.team!==0||!buildings.includes(b)||b.buildLeft||b.upgradeLeft||(b.tier||1)>=3||gold<upgradeCost(b)||!merchant()||((b.tier||1)===2&&level<8))return false;gold-=upgradeCost(b);b.upgradeLeft=8;b.cd=8;stats.upgrades++;return true;}
   function repair(b){if(!active()||b.team!==0||!buildings.includes(b)||b.buildLeft||gold<repairCost(b)||b.hp>=b.max)return false;gold-=repairCost(b);b.hp=Math.min(b.max,b.hp+b.max*.3);return true;}
-  function selectMap(id){if(started&&!ended)return false;map=id==='narrows'?'narrows':'verdant';Battlefield.crossings.splice(0,Battlefield.crossings.length,...(map==='narrows'?[{x:840,half:76},{x:1680,half:76}]:[{x:600,half:64},{x:1260,half:140},{x:1920,half:64}]));$('#mapSelect').value=map;return true;}
+  function selectMap(id){if(started&&!ended||window.CrownfallOnline?.active)return false;map=id==='kingdoms'?'kingdoms':id==='narrows'?'narrows':'verdant';Battlefield.crossings.splice(0,Battlefield.crossings.length,...(map==='narrows'?[{x:840,half:76},{x:1680,half:76}]:[{x:600,half:64},{x:1260,half:140},{x:1920,half:64}]));$('#mapSelect').value=map;return true;}
   const originalReset=reset;
   reset=function(){ranks={};originalReset();selected=null;focus=null;march=null;command='move';spec=null;reported=false;stats={kills:0,deaths:0,gold:200,structureDamage:0,heroDamage:0,losses:0,enemyLosses:0,upgrades:0,buildings:0};close();$('#mapSelect').disabled=false;};
   const originalBegin=begin;begin=function(){originalBegin();$('#mapSelect').disabled=true;sound('build');};

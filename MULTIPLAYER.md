@@ -4,6 +4,12 @@ Play at https://crownfall-dyhx.onrender.com or https://crownfall-online.onrender
 
 Choose **Online · 2–4 players** on champion selection. Enter a name, create a room, and share its six-character code or invite link. Everyone chooses a champion and presses **Ready**; the host starts when 2–4 players are connected and ready. Each player commands a separate kingdom. Destroy rival keeps; the last standing kingdom wins.
 
+## Single-player Four Kingdoms
+
+In champion selection, choose **Four Kingdoms · you vs 3 AI commanders** under **Battlefield**, select a difficulty, and deploy. This runs entirely in the browser without a room or server connection. Three independent AI kingdoms build armies, buy upgrades, choose talents, use abilities, retreat, and fight each other. The eight difficulties affect reactions, retreat thresholds, economy, recruitment, and starting hero strength. Pause is available; destroying all three rival keeps wins, and losing your own keep ends the battle. Desktop and phone controls share the same map and rules as online play.
+
+`node verify-skirmish.cjs` checks offline startup, AI economies and expansion at every difficulty, player movement/skills, pause, victory/defeat, and return to the original solo maps.
+
 ## Map and mechanics
 
 Four Kingdoms is a 4200 × 4200 top-down battlefield. Jade (south), Crimson (north), Violet (west), and Amber (east) have walled keeps, open gates, a starting barracks, a guard tower, and a recovery sanctuary. North/south and east/west lanes meet at the Crown Crossroads. All four gates are traversable in both directions. Only occupied kingdoms participate.
