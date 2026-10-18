@@ -1,5 +1,7 @@
 # Four Kingdoms online play
 
+Play at https://crownfall-dyhx.onrender.com or https://crownfall-online.onrender.com. Both connect to the same battle service.
+
 Choose **Online · 2–4 players** on champion selection. Enter a name, create a room, and share its six-character code or invite link. Everyone chooses a champion and presses **Ready**; the host starts when 2–4 players are connected and ready. Each player commands a separate kingdom. Destroy rival keeps; the last standing kingdom wins.
 
 ## Map and mechanics
