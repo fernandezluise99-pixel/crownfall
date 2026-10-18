@@ -1,5 +1,7 @@
 # Deploy Crownfall on Render
 
+**Online expansion:** the existing Static Site now connects to a separate Node web service for 2–4 player rooms. See [MULTIPLAYER.md](MULTIPLAYER.md). `render.yaml` describes both resources. The web service runs `node server.cjs` after `node build.cjs`; its health endpoint is `/health`. `online-config.js` contains the public battle-service URL, not a secret.
+
 This browser game deploys as a Render **Static Site**. No backend, database, environment variables, or start command is required.
 
 1. Push this project, including `assets/art/*.png` and `render.yaml`, to a GitHub or GitLab repository.

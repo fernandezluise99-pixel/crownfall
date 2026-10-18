@@ -1,0 +1,8 @@
+{
+  "name": "crownfall",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crownfall solo and server-authoritative 2–4 player online skirmishes",
+  "engines": {"node": ">=22"},
+  "scripts": {"start": "node server.cjs", "build": "node build.cjs", "test:online": "node verify-online.cjs"}
+}

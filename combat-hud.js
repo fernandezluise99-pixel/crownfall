@@ -12,6 +12,7 @@
   }
   $('#recall').innerHTML='<kbd>B</kbd><span class="skill-icon" aria-hidden="true">'+svg('M3 11 12 3l9 8 M6 10v11h12V10 M10 21v-7h4v7')+'</span><span class="skill-name">Recall</span><span class="skill-ready" id="recallState">RETURN</span><small>Return to your sanctuary after a 3 second channel. Moving or taking damage cancels.</small>';
   let painted=null;
+  window.CrownfallAbilityIcons=id=>{if(!paths[id])return;$('#qIcon').innerHTML=svg(paths[id][0]);$('#eIcon').innerHTML=svg(paths[id][1]);painted=id;};
   const previous=ui;
   ui=function(){previous();const c=champions[selectedHero];if(painted!==selectedHero){$('#qIcon').innerHTML=svg(paths[selectedHero][0]);$('#eIcon').innerHTML=svg(paths[selectedHero][1]);painted=selectedHero;}
     for(const [key,id,index]of [['q','skillQ',0],['e','skillE',1]]){const button=$('#'+id),remaining=hero[key],base=key==='q'?{warden:7,ranger:8,arcanist:9,shade:6}[selectedHero]:{warden:18,ranger:14,arcanist:10,shade:12}[selectedHero],maximum=base*cooldownMultiplier()*(selectedHero==='arcanist'&&hero.path===1?.85:1);button.style.setProperty?.('--cooldown',String(Math.min(1,remaining/maximum)));button.classList.toggle('cooling',remaining>0);$('#'+key+'Cooldown').textContent=remaining>0?String(Math.ceil(remaining)):'';$('#'+key+'cd').textContent=c[key];$('#'+key+'Ready').textContent=remaining>0?'COOLDOWN':'READY';button.setAttribute('aria-label',key.toUpperCase()+': '+c[key]+'. '+(remaining>0?Math.ceil(remaining)+' seconds remaining.':'Ready. ')+$('#'+key+'desc').textContent);}

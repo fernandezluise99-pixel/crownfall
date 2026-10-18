@@ -11,3 +11,16 @@ services:
       - path: /*
         name: Cache-Control
         value: public, max-age=0, must-revalidate
+  - type: web
+    name: crownfall-online
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: node build.cjs
+    startCommand: node server.cjs
+    healthCheckPath: /health
+    envVars:
+      - key: CLIENT_ORIGIN
+        value: https://crownfall-dyhx.onrender.com
+      - key: SKIP_INSTALL_DEPS
+        value: "true"
