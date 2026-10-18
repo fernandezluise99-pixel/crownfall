@@ -42,6 +42,8 @@ Enemy heroes spend one talent point per level in a capped rotating allocation, r
 
 ## Controls, maps, and feedback
 
+The champion HUD uses hero-specific Q/E icons with numeric cooldowns and sweep overlays, hotkey badges, ready states, and a separate Recall slot. Construction occupies a vertical rail on the right side of the battlefield, with costs and production descriptions in each row. On short/small screens the rail scrolls inside the game frame. Ability buttons retain their existing hotkeys and click handlers.
+
 Click an enemy to select and follow it. **T**, then click, orders attack-move; the hero engages nearby enemies and resumes the route after they fall. **H** holds position with auto-attacks enabled. WASD returns to direct control. Click movement follows gate/bridge waypoints. Recall clears movement orders.
 
 Select **Verdant Front** (three crossings) or **Stone Narrows** (two narrow crossings) before deployment. Crossings change collision, routes, bridges, and approach roads. Both preserve vertical north/south play and fortified keeps.

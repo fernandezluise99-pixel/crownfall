@@ -2,7 +2,7 @@
 const nodes=new Map(),events=new Map(),simulationTicks=process.env.CROWNFALL_QUICK?1200:12000;
 function node(id){if(!nodes.has(id))nodes.set(id,{id,style:{},dataset:{},children:[],classList:{toggle(){}},setAttribute(){},appendChild(child){this.children.push(child);},querySelectorAll(){return [];},addEventListener(type,callback,capture){const key=id+':'+type;if(!events.has(key))events.set(key,[]);events.get(key).push({callback,capture});},focus(){},getBoundingClientRect(){return {left:0,top:0,width:1260,height:800};},getContext(){return new Proxy({},{get:(o,k)=>o[k]??(()=>{})});}});return nodes.get(id);}
 const sandbox={document:{querySelector:node,querySelectorAll:()=>[],createElement:()=>node('generated'+nodes.size),addEventListener(type,callback){node('document').addEventListener(type,callback);}},window:{addEventListener(){}},requestAnimationFrame(){},console};vm.createContext(sandbox);
-for(const file of ['art.js','generated-art.js','sprite-registration.js','animation-art.js','environment.js','enemy-ai.js','game.js','strategy-art.js','strategy.js'])vm.runInContext(fs.readFileSync(file,'utf8'),sandbox,{filename:file});
+for(const file of ['art.js','generated-art.js','sprite-registration.js','animation-art.js','environment.js','enemy-ai.js','game.js','strategy-art.js','strategy.js','combat-hud.js'])vm.runInContext(fs.readFileSync(file,'utf8'),sandbox,{filename:file});
 function run(code){return vm.runInContext(code,sandbox);}
 function click(x,y){let stopped=false;const event={clientX:x,clientY:y,stopImmediatePropagation(){stopped=true;}};for(const {callback} of [...events.get('#game:pointerdown')].sort((a,b)=>Number(!!b.capture)-Number(!!a.capture))){if(!stopped)callback(event);}}
 run(`begin();gold=5000;build('merchant');if(!placeBuilding(1560,4680))throw Error('Merchant placement');`);
@@ -23,6 +23,7 @@ assert.equal(run(`Strategy.upgrade(chosen)`),true);run(`for(let i=0;i<170;i++)st
 run(`chosen.hp-=200`);assert.equal(run('Strategy.repair(chosen)'),true);assert.equal(run('chosen.hp'),612.5);
 run(`level=7`);assert.equal(run('Strategy.upgrade(chosen)'),false);run(`level=8`);assert.equal(run('Strategy.upgrade(chosen)'),true);
 run(`reset();Strategy.selectMap('narrows');`);assert.equal(run('Battlefield.crossings.length'),2);assert.equal(run('Battlefield.blocked(1260,2510)'),true);assert.equal(run('Battlefield.blocked(840,2510)'),false);run(`begin()`);assert.equal(run(`Strategy.selectMap('verdant')`),false);
+run(`reset();begin();$('#skillQ').onclick();ui();if(!hero.q||+$('#qCooldown').textContent!==Math.ceil(hero.q))throw Error('Q cooldown display');$('#skillE').onclick();ui();if(!hero.e||+$('#eCooldown').textContent!==Math.ceil(hero.e))throw Error('E cooldown display');for(let i=0;i<400;i++)step(.05);ui();if($('#qCooldown').textContent!==''||$('#qReady').textContent!=='READY')throw Error('Ready ability display');`);
 // Verify actual captured pointer and keyboard handlers, rather than only helper functions.
 run(`hero.x=1260;hero.y=2200;updateCamera();var targetEnemy=unit(1,'soldier',1320,2200);units.push(targetEnemy);`);
 click(run('1320-camera.x'),run('2200-camera.y'));assert.equal(run('Strategy.focus===targetEnemy'),true);run(`hero.cd=0;for(let i=0;i<12;i++)step(.05);`);assert.ok(run('targetEnemy.hp')<110,'explicit target attacked');
