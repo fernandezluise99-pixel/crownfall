@@ -1,0 +1,18 @@
+'use strict';
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const harness=fs.readFileSync('verify-strategy.cjs','utf8').split('function run(code)')[0];
+const {sandbox,nodes,node,vm}=new Function('require',harness+';return {sandbox,nodes,node,vm};')(require);
+const media={matches:true},run=s=>vm.runInContext(s,sandbox);
+sandbox.window.matchMedia=()=>media;
+sandbox.document.querySelector=id=>{const created=[...nodes.values()].find(n=>n.id===id.slice(1));if(created)nodes.set(id,created);return node(id);};
+node('.playfield').getBoundingClientRect=()=>({width:390,height:380});
+run(fs.readFileSync('mobile-controls.js','utf8'));
+assert.equal(run('VW'),630);assert.ok(run('VH')>600);run('begin();draw()');
+const stick=sandbox.document.querySelector('#mobileJoystick');stick.getBoundingClientRect=()=>({left:0,top:0,width:104,height:104});
+const pointer=(id,x,y)=>({pointerId:id,clientX:x,clientY:y,preventDefault(){}});
+const before=run('hero.x');stick.onpointerdown(pointer(1,100,52));run('step(.2)');assert.ok(run('hero.x')>before+10);
+stick.onpointerup(pointer(2,0,0));assert.ok(sandbox.window.CrownfallTouch.x>0,'second touch cannot cancel movement');
+stick.onpointerup(pointer(1,0,0));assert.equal(sandbox.window.CrownfallTouch.x,0);
+node('.playfield').getBoundingClientRect=()=>({width:844,height:306});sandbox.window.CrownfallMobile.configure();assert.equal(run('VW'),1000);run('draw()');
+media.matches=false;sandbox.window.CrownfallMobile.configure();assert.equal(run('VW'),1260);assert.equal(run('VH'),800);
+console.log('PASS: portrait/landscape camera, real solo joystick movement, multi-touch release isolation, desktop viewport restoration, resized rendering');

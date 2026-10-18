@@ -108,7 +108,7 @@ const Strategy = (() => {
     if(focus?.hp<=0)focus=null;
     if(focus&&hero.hp>0&&command!=='hold'){target=dist(hero,focus)>hero.range*.9?focus:null;}
     if(command==='hold')target=null;
-    const keyboardMove=['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].some(k=>keys.has(k));if(keyboardMove){focus=null;command='move';march=null;}
+    const keyboardMove=['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].some(k=>keys.has(k))||window.CrownfallTouch?.x||window.CrownfallTouch?.y;if(keyboardMove){focus=null;command='move';march=null;}
     if(march&&!focus&&command!=='hold'){target=Battlefield.route(hero,march);if(dist(hero,march)<8){march=null;target=null;}}
     if(focus&&target)target=Battlefield.route(hero,focus);
     const speeds=[];for(const a of [...units,hero]){let factor=clock<(a.slowUntil||0)?.6:1;if(isChampion(a)&&(a===hero?selectedHero:a.archetype)==='ranger'&&a.path===1&&a.boost>0)factor*=1.3;if(factor!==1){speeds.push([a,a.speed]);a.speed*=factor;}}
