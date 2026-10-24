@@ -1,0 +1,4 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),{createApp}=require('./server.cjs');
+async function main(){const app=createApp();await new Promise(resolve=>app.server.listen(0,'127.0.0.1',resolve));try{const base='http://127.0.0.1:'+app.server.address().port;for(const file of ['index.html','last-light.html','last-light.css','last-light-data.js','last-light-core.js','last-light.js']){const res=await fetch(base+'/'+file);assert.equal(res.status,200);assert.deepEqual(Buffer.from(await res.arrayBuffer()),fs.readFileSync('dist/'+file));}const health=await fetch(base+'/health');assert.equal(health.status,200);console.log('PASS: both game pages and all Last Light assets served byte-for-byte by existing Node service; Crownfall health endpoint remains available');}finally{await app.close();}}
+main().catch(e=>{console.error(e);process.exitCode=1;});
