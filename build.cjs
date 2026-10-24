@@ -11,6 +11,6 @@ for(const file of [...pages,...new Set(entrypoints)]){
 }
 const art=path.join(root,'assets','art'),destination=path.join(out,'assets','art');
 fs.mkdirSync(destination,{recursive:true});
-const images=fs.readdirSync(art).filter(file=>file.endsWith('.png'));
+const images=fs.readdirSync(art).filter(file=>file.endsWith('.png')&&!file.startsWith('last-light-')||file.startsWith('last-light-')&&file.endsWith('.jpg'));
 for(const image of images)fs.copyFileSync(path.join(art,image),path.join(destination,image));
-console.log('Built Crownfall + Last Light: '+(new Set(entrypoints).size+pages.length)+' runtime files and '+images.length+' art sheets → dist/');
+console.log('Built Crownfall + Last Light: '+(new Set(entrypoints).size+pages.length)+' runtime files and '+images.length+' art assets → dist/');

@@ -2,7 +2,7 @@
 
 Open `last-light.html`, or follow **Play Last Light** in Crownfall's header. The two games use separate pages and scripts, and are built/deployed together. No new service, package, account, or database is required. Run `node build.cjs`, then `node server.cjs`, and visit `http://localhost:3000/last-light.html`.
 
-Last Light is an original single-player survival card game informed by the researched AP/ammo/barricade design of Shelter. All content, art, and rules here are original prototype choices. The UI uses original vector illustrations and an ink-and-paper supply-card style.
+Last Light is an original single-player survival card game informed by the researched AP/ammo/barricade design of Shelter. All content, art, and rules here are original prototype choices. The UI uses a complete set of 35 generated survival illustrations, material-based card frames, enemy and ally portraits, mission scenes, a battle-table background, and a lantern card back. The card-details dialog enlarges each illustration and its rules. See [the art guide](assets/art/LAST-LIGHT-ART-DIRECTION.md) and [full prompts](assets/art/LAST-LIGHT-PROMPTS.json).
 
 ## Playing
 
